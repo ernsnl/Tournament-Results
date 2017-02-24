@@ -1,4 +1,3 @@
-rdb-fullstack
-=============
+# Udacity FullStack Nanodegree Relational Database Project
 
-Common code for the Relational Databases and Full Stack Fundamentals courses
+For more information please go [here](../vagrant/master)
