@@ -12,10 +12,6 @@ Create database tournament;
 
 \connect tournament
 
-Drop table if exists Player cascade;
-Drop table if exists Match cascade;
-Drop view if exists Standing cascade;
-
 Create Table Player(
   ID serial primary key,
   Name text
@@ -31,7 +27,7 @@ Create Table Match(
 
 CREATE VIEW Standing AS
 SELECT P.ID as Player_ID,
-Select P.Name as Player_Name,
+SELECT P.Name as Player_Name,
 (SELECT count(*) FROM Match WHERE Match.Winner_Player_ID = P.ID) as Won,
 (SELECT count(*) FROM Match WHERE P.ID in (Winner_Player_ID, Loser_Player_ID)) as Played
 FROM Player as P

@@ -14,9 +14,11 @@ query_report_matches = "INSERT INTO Match (Winner_Player_ID, Loser_Player_ID) Va
 query_standing = "SELECT * FROM Standing"
 query_matches = "SELECT * FROM Match"
 
+
 def connect():
     """Connect to the PostgreSQL database.  Returns a database connection."""
     return psycopg2.connect("dbname=tournament")
+
 
 def non_return_query(conn, query, params=None):
     """Executing queries that has no return value"""
@@ -42,6 +44,7 @@ def return_query(conn, query, params=None):
     finally:
         conn.close()
 
+
 def deleteMatches():
     """Remove all the match records from the database."""
     non_return_query(connect(), query_delete_match)
@@ -57,11 +60,9 @@ def countPlayers():
     return_value = return_query(connect(), query_count_player)
     return return_value[0][0]
 
+
 def registerPlayer(name):
     """Adds a player to the tournament database.
-
-    The database assigns a unique serial id number for the player.  (This
-    should be handled by your SQL database schema, not in your Python code.)
 
     Args:
       name: the player's full name (need not be unique).
@@ -74,9 +75,6 @@ def registerPlayer(name):
 def playerStandings():
     """Returns a list of the players and their win records, sorted by wins.
 
-    The first entry in the list should be the player in first place, or a player
-    tied for first place if there is currently a tie.
-
     Returns:
       A list of tuples, each of which contains (id, name, wins, matches):
         id: the player's unique id (assigned by the database)
@@ -84,7 +82,7 @@ def playerStandings():
         wins: the number of matches the player has won
         matches: the number of matches the player has played
     """
-    return  return_query(connect(), query_standing)
+    return return_query(connect(), query_standing)
 
 
 def reportMatch(winner, loser):
@@ -99,13 +97,9 @@ def reportMatch(winner, loser):
     params.append(loser)
     non_return_query(connect(), query_report_matches, params)
 
+
 def swissPairings():
     """Returns a list of pairs of players for the next round of a match.
-
-    Assuming that there are an even number of players registered, each player
-    appears exactly once in the pairings.  Each player is paired with another
-    player with an equal or nearly-equal win record, that is, a player adjacent
-    to him or her in the standings.
 
     Returns:
       A list of tuples, each of which contains (id1, name1, id2, name2)
@@ -115,7 +109,7 @@ def swissPairings():
         name2: the second player's name
     """
 
-    standings = return_query(connect(), query_standing)
+    standings = playerStandings()
     winners = standings[::2]
     losers = standings[1::2]
     if len(winners) > len(losers):
@@ -125,6 +119,7 @@ def swissPairings():
 
     swiss_pair = []
     for _number in range(0, len(winners)):
-        swiss_pair.append((winners[0][0], winners[0][1], losers[0][0], losers[0][1]))
+        swiss_pair.append(
+            (winners[0][0], winners[0][1], losers[0][0], losers[0][1]))
 
     return swiss_pair
