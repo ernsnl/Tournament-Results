@@ -10,7 +10,8 @@ query_delete_match = "DELETE FROM Match"
 query_delete_player = "DELETE FROM Player"
 query_count_player = "SELECT Count(*) FROM Player"
 query_insert_player = "INSERT INTO Player (Name) Values (%s)"
-query_report_matches = "INSERT INTO Match (Winner_Player_ID, Loser_Player_ID) Values (%s, %s)"
+query_report_matches = "INSERT INTO Match (Winner_Player_ID,
+Loser_Player_ID) Values (%s, %s)"
 query_standing = "SELECT * FROM Standing"
 query_matches = "SELECT * FROM Match"
 
